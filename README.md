@@ -1,6 +1,9 @@
-# Web Scrapper
+# Web Scrapper 
 
 Projeto desenvolvido em python, sobre tudo com Selenium, BeautifulSoup e Pandas é um web scrapper que puxa uma tabela com as principais empresas listadas na bolsa, no site fundamentus e após isso aplica uma série de filtros que são úteis no mundo dos investimentos. 
+
+Plataforma disponível: 
+- Linux 
 
 ## Componentes
 Esse projeto é dividido em 4 partes básicas, sendo elas:
