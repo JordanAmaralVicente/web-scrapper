@@ -29,6 +29,7 @@ def main_scrapper():
     df = pd.read_html(str(table))[0]
 
     os_exclude_directory()
+    print(df)
     save_result_as_excel(df, "../excel_tables/output", False)
     main_filter()
 
