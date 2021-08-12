@@ -30,7 +30,9 @@ Essa parte aqui é avançada não por ser código complexos, mas a meu ver foi m
 - chrome driver (o ques tá presente no pacote é para versão especifica do navegador que uso, mas pode baixar a vesão compatível com seu navegador no seguinte link: [Chrome Driver](https://chromedriver.chromium.org/downloads)) 
 
 ```
-cd webscrapper; chmod +x *; ./main_scrapper.py 
+cd webscrapper
+chmod +x *
+./main_scrapper.py 
 ```
 
 ## Considerações Finais
