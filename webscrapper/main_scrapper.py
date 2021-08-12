@@ -29,9 +29,13 @@ def main_scrapper():
     df = pd.read_html(str(table))[0]
 
     os_exclude_directory()
-    print(df)
     save_result_as_excel(df, "../excel_tables/output", False)
-    main_filter()
+    
+    proceed = input('Deseja prosseguir para o próximo passo ? [Y/n]: ')
+    if proceed == 'Y':
+        main_filter()
+    else:
+        return 
 
 
 if __name__ == '__main__':
