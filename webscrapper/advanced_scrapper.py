@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
-# -*- coding: utf -*- 
 import time
-import pandas as pd
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from utils import get_today, save_result_as_excel
+import asyncio
 import math
+import pandas as pd
+from pyppeteer import launch
+from bs4 import BeautifulSoup
+from utils import get_today, save_result_as_excel
+
 
 def html_elemments(html):
     soup = BeautifulSoup(html, 'html.parser')
@@ -14,26 +14,29 @@ def html_elemments(html):
     value = soup.find_all('td')[3].find('span').string
     return {'lpa': lpa, 'vpa': vpa, 'value': value}
 
+
 def transform_column(value):
     return float(str(value).rstrip('%').replace('.', '').replace(',','.'))
 
-def advanced_scrapper():
-    driver = webdriver.Chrome('../chromeDriver/chromedriver')
+
+async def advanced_scrapper():
+    browser = await launch(headless=True)
+    page = await browser.newPage()
+
     df = pd.read_excel("../resultados/output-"+ get_today() +".xlsx")
 
     base_url = 'https://fundamentus.com.br/detalhes.php?papel='
     lpa_array, vpa_array, valuation_array, paper_array, actual_value = [], [], [], [], []
     
-    for index,row in df.iterrows():
+    for _,row in df.iterrows():
         
         paper = row['Papel']
         url = base_url + paper
 
         print(f'INICIANDO SCRAPPER NO PAPEL: { paper }')
-        driver.get(url)
-        time.sleep(0.5)
+        response = await page.goto(url, {'waitUntil': 'networkidle2'})
 
-        html = driver.page_source
+        html = await response.text()
         soup = BeautifulSoup(html, 'html.parser')
         lpa = soup.find_all('td')[35].find('span').string
         vpa = soup.find_all('td')[41].find('span').string
@@ -56,14 +59,13 @@ def advanced_scrapper():
 
         time.sleep(0.5)
 
-    driver.close()
+    await browser.close()
 
     final_df = pd.DataFrame(data={ 'AÇÃO': paper_array,'VALUATION': valuation_array,
              'ATUAL_VALUE': actual_value,'LPA': lpa_array,'VPA': vpa_array})
 
-    save_result_as_excel(final_df, "../resultados/advanced-output")
-    
+    save_result_as_excel(final_df, "../resultados/advanced-output")  
 
 
 if __name__ == "__main__":
-    advanced_scrapper()
+    asyncio.get_event_loop().run_until_complete(advanced_scrapper())
