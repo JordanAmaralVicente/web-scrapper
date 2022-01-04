@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf -*- 
 from datetime import datetime
 import pandas
+
 
 not_includeds = [
                  'BOAS3','SEQL3','B3SA3','BBSE3','IRBR3','SULA11','BBDC4','BBDC3',
@@ -15,8 +14,10 @@ not_includeds = [
                  'SULA11', 'APER3', 'IRBR3'
                  ]
 
+
 def get_today():
     return datetime.now().strftime("%d-%m-%Y")
+
 
 def save_result_as_excel(final_df, file_name, with_date=True):
     output = file_name if not with_date else file_name + "-" + get_today()
